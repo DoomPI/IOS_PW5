@@ -9,6 +9,12 @@ import UIKit
 
 final class ColorPaletteView: UIControl {
     
+    private enum ConstantsEnum {
+        static let redControlTag: Int = 0
+        static let greenControlTag: Int = 1
+        static let blueControlTag: Int = 2
+    }
+    
     private let stackView = UIStackView()
     private(set) var chosenColor: UIColor = .systemGray6
     
@@ -27,9 +33,9 @@ final class ColorPaletteView: UIControl {
         let greenControl = ColorSliderView(colorName: "G", value: Float(chosenColor.rgba.green))
         let blueControl = ColorSliderView(colorName: "B", value: Float(chosenColor.rgba.blue))
         
-        redControl.tag = 0
-        greenControl.tag = 1
-        blueControl.tag = 2
+        redControl.tag = ConstantsEnum.redControlTag
+        greenControl.tag = ConstantsEnum.greenControlTag
+        blueControl.tag = ConstantsEnum.blueControlTag
         
         stackView.axis = .vertical
         stackView.distribution = .equalSpacing
@@ -50,26 +56,33 @@ final class ColorPaletteView: UIControl {
     @objc
     private func sliderMoved(slider: ColorSliderView) {
         switch slider.tag {
-        case 0:
+        case ConstantsEnum.redControlTag:
             self.chosenColor = UIColor(
                 red: CGFloat(slider.value),
                 green: chosenColor.rgba.green,
                 blue: chosenColor.rgba.blue,
                 alpha: chosenColor.rgba.alpha
             )
-        case 1:
+        case ConstantsEnum.greenControlTag:
             self.chosenColor = UIColor(
                 red: chosenColor.rgba.red,
                 green: CGFloat(slider.value),
                 blue: chosenColor.rgba.blue,
                 alpha: chosenColor.rgba.alpha
             )
-        default:
+        case ConstantsEnum.blueControlTag:
             self.chosenColor = UIColor(
                 red: chosenColor.rgba.red,
                 green: chosenColor.rgba.green,
                 blue: CGFloat(slider.value),
                 alpha: chosenColor.rgba.alpha
+            )
+        default:
+            self.chosenColor = UIColor(
+                red: 0,
+                green: 0,
+                blue: 0,
+                alpha: 1
             )
         }
         

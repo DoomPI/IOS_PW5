@@ -9,6 +9,8 @@ import UIKit
 
 final class WelcomeViewController: UIViewController {
     
+    private(set) var router: WelcomeRoutingLogic?
+    
     private let commentLabel = UILabel()
     private let valueLabel = UILabel()
     private let incrementButton = UIButton()
@@ -16,11 +18,27 @@ final class WelcomeViewController: UIViewController {
     private let buttonsSV = UIStackView()
     
     private var value: Int = 0
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         setupView()
+    }
+    
+    private func setup() {
+        let router = WelcomeRouter()
+        router.viewController = self
+        self.router = router
     }
     
     private func setupView() {
@@ -75,6 +93,11 @@ final class WelcomeViewController: UIViewController {
         colorPaletteView.isHidden.toggle()
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.impactOccurred()
+    }
+    
+    @objc
+    private func notesButtonPressed() {
+        router?.navigateToNotesScreen()
     }
     
     @objc
@@ -151,6 +174,7 @@ final class WelcomeViewController: UIViewController {
         colorsButton.addTarget(self, action: #selector(paletteButtonPressed), for: .touchUpInside)
         
         let notesButton = MenuButtonFactory.makeMenuButton(title: "$")
+        notesButton.addTarget(self, action: #selector(notesButtonPressed), for: .touchUpInside)
         let newsButton = MenuButtonFactory.makeMenuButton(title: "% ")
         buttonsSV.addArrangedSubview(colorsButton)
         buttonsSV.addArrangedSubview(notesButton)
@@ -164,4 +188,3 @@ final class WelcomeViewController: UIViewController {
         buttonsSV.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor, 24)
     }
 }
-

@@ -16,6 +16,19 @@ class NewsListPresenter {
 extension NewsListPresenter: NewsListPresentationLogic {
     
     func present(_ response: Model.GetNews.Response) {
-        viewController?.display(data: Model.GetNews.ViewModel(news: response.news))
+        var articles = [Model.Article]()
+        guard let networkArticles = response.news.articles else {
+            return
+        }
+        for article in networkArticles {
+            articles.append(Model.Article(
+                title: article.title,
+                description: article.description,
+                imageURL: article.imageURL
+            ))
+        }
+        let news = Model.News(articles: articles)
+        
+        viewController?.display(data: Model.GetNews.ViewModel(news: news))
     }
 }

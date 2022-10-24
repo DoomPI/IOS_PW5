@@ -12,14 +12,14 @@ enum NewsModel {
     enum GetNews {
         struct Request {}
         struct Response {
-            var news: News
+            var news: NewsNetwork
         }
         struct ViewModel {
             var news: News
         }
     }
     
-    struct Article: Decodable {
+    struct ArticleNetwork: Decodable {
         let title: String
         let description: String
         let imageURL: URL?
@@ -31,11 +31,28 @@ enum NewsModel {
         }
     }
     
-    struct News: Decodable {
-        let articles: [Article]?
+    struct NewsNetwork: Decodable {
+        let articles: [ArticleNetwork]?
         
         enum CodingKeys: String, CodingKey {
             case articles = "articles"
+        }
+    }
+    
+    struct News {
+        let articles: [Article]?
+    }
+    
+    class Article {
+        let title: String
+        let description: String
+        let imageURL: URL?
+        var imageData: Data? = nil
+        
+        init(title: String, description: String, imageURL: URL?) {
+            self.title = title
+            self.description = description
+            self.imageURL = imageURL
         }
     }
 }

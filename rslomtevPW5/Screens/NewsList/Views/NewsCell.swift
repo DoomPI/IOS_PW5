@@ -34,16 +34,26 @@ class NewsCell: UITableViewCell {
     func configure(with news: NewsModel.Article) {
         newsTitleLabel.text = news.title
         newsDescriptionLabel.text = news.description
-        if let url = news.imageURL {
-            URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-                guard let data = data else {
+        if let data = news.imageData {
+            DispatchQueue.main.async {
+                self.newsImageView.image = UIImage(data: data)
+            }
+        } else {
+            guard let imageURL = news.imageURL else {
+                return
+            }
+            DispatchQueue.global().async {
+                guard let imageData = try? Data(contentsOf: imageURL) else {
                     return
                 }
+                news.imageData = imageData
+                let image = UIImage(data: imageData)
                 DispatchQueue.main.async {
-                    self?.newsImageView.image = UIImage(data: data)
+                    self.newsImageView.image = image
                 }
-            }.resume()
+            }
         }
+
     }
     
     private func setupView() {

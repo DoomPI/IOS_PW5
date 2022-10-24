@@ -91,11 +91,14 @@ extension NewsViewController: NewsDisplayLogic {
     func configure(article: Model.Article) {
         titleLabel.text = article.title
         descriptionLabel.text = article.description
-        if let url = article.imageURL {
+        if let data = article.imageData {
+            imageView.image = UIImage(data: data)
+        } else if let url = article.imageURL {
             URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
                 guard let data = data else {
                     return
                 }
+                article.imageData = data
                 DispatchQueue.main.async {
                     self?.imageView.image = UIImage(data: data)
                 }

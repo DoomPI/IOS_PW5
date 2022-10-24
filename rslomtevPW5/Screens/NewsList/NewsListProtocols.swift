@@ -22,7 +22,7 @@ protocol NewsListBusinessLogic {
 
 protocol NewsListWorkerLogic {
     typealias Model = NewsModel
-    func getNews(_ request: Model.GetNews.Request, completion: @escaping ((Model.News) -> ()))
+    func getNews(_ request: Model.GetNews.Request, completion: @escaping ((Model.NewsNetwork) -> ()))
 }
 
 protocol NewsListRoutingLogic {
